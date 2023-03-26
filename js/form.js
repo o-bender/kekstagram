@@ -68,11 +68,21 @@ const onFormSubmit = (evt) => {
   }
 };
 
-const init = () => {
+const init = (onSubmit, onReset) => {
   pristine.addValidator(descriptionField, validateMessage, MESSAGE_ERROR_TEXT);
   pristine.addValidator(hashtagsField, validateTags, TAG_ERROR_TEXT);
 
-  form.addEventListener('submit', onFormSubmit);
+  form.addEventListener('submit', (evt) => {
+    onFormSubmit();
+    if (onSubmit) {
+      onSubmit(evt);
+    }
+  });
+  form.addEventListener('reset', (evt) => {
+    if (onReset) {
+      onReset(evt);
+    }
+  });
   uploadFile.addEventListener('change', openFormUploadImage);
   closeFormButton.addEventListener('click', closeFormUploadImage);
 }
