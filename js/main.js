@@ -1,17 +1,17 @@
 import {renderPictures} from './picture.js';
-import {createPhotos} from './mock.js';
-import {init as initForm} from './form.js';
-import {init as initSlider, resetEffects} from './upload_foto_modal/slider.js';
-import {init as initScale, resetScale} from './upload_foto_modal/scale.js';
+import {closeFormUploadImage, init as initForm} from './upload_foto_modal/form.js';
+import {getData, sendData} from "./api.js";
+import {showErrorMessage, showSuccessUploadMessage, showErrorUploadMessage} from "./message.js";
 
-const photos = createPhotos({photosNum: 19, startNum: 100});
-renderPictures(photos);
-initSlider();
-initScale();
-initForm(() => {
-    resetEffects();
-    resetScale();
-}, () => {
-    resetEffects();
-    resetScale();
-});
+const onSendDataSuccess = () => {
+    closeFormUploadImage();
+    showSuccessUploadMessage();
+}
+
+getData((photos) => {
+    renderPictures(photos);
+    initForm(
+        (formData) => sendData(onSendDataSuccess, showErrorUploadMessage, formData)
+    );
+}, showErrorMessage)
+

@@ -1,4 +1,6 @@
-import {isEscapeKey} from './utils.js';
+import {isEscapeKey} from '../utils.js';
+import {init as initSlider, resetEffects} from './slider.js';
+import {init as initScale, resetScale} from './scale.js';
 
 const MESSAGE_LENGTH = 140;
 const MESSAGE_ERROR_TEXT = `Максимальная длина ${MESSAGE_LENGTH} символов`;
@@ -20,11 +22,8 @@ const pristine = new Pristine(form, {
 });
 
 const isValidTag = (tag) => HASHTAG_RULES.test(tag);
-
 const validateMessage = (value) => value.length <= MESSAGE_LENGTH;
-
 const hasValidateCount = (tags) => tags.length <= HASHTAG_MAX_COUNT;
-
 const hasUniqueTags = (tags) => tags.length === new Set(tags).size;
 
 const validateTags = (value) => {
@@ -33,6 +32,9 @@ const validateTags = (value) => {
 };
 
 const openFormUploadImage = () => {
+  pristine.reset();
+  resetScale();
+  resetEffects();
   formUploadPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
 
@@ -40,13 +42,15 @@ const openFormUploadImage = () => {
 };
 
 const closeFormUploadImage = () => {
-  form.reset();
-  pristine.reset();
-
   document.body.classList.remove('modal-open');
   formUploadPicture.classList.add('hidden');
 
   document.removeEventListener('keydown', onFormKeydown);
+
+  form.reset();
+  pristine.reset();
+  resetScale();
+  resetEffects();
 };
 
 function onFormKeydown (evt) {
@@ -61,30 +65,21 @@ function onFormKeydown (evt) {
   }
 }
 
-const onFormSubmit = (evt) => {
-  evt.preventDefault();
-  if(pristine.validate()) {
-    form.submit();
-  }
-};
+const init = (onSubmit) => {
+  initSlider();
+  initScale();
 
-const init = (onSubmit, onReset) => {
   pristine.addValidator(descriptionField, validateMessage, MESSAGE_ERROR_TEXT);
   pristine.addValidator(hashtagsField, validateTags, TAG_ERROR_TEXT);
 
   form.addEventListener('submit', (evt) => {
-    onFormSubmit();
-    if (onSubmit) {
-      onSubmit(evt);
-    }
-  });
-  form.addEventListener('reset', (evt) => {
-    if (onReset) {
-      onReset(evt);
+    evt.preventDefault();
+    if(pristine.validate()) {
+      onSubmit(new FormData(form));
     }
   });
   uploadFile.addEventListener('change', openFormUploadImage);
   closeFormButton.addEventListener('click', closeFormUploadImage);
 }
 
-export { init };
+export { init, closeFormUploadImage };

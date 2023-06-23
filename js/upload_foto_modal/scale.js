@@ -4,18 +4,18 @@ const SCALE_STEP = 25;
 
 const zoomOutButtonElement = document.querySelector('.scale__control--smaller');
 const zoomInButtonElement = document.querySelector('.scale__control--bigger');
-const scaleFildValue = document.querySelector('.scale__control--value');
+const scaleFieldValue = document.querySelector('.scale__control--value');
 const scalePreview = document.querySelector('.img-upload__preview img');
 
 const scaleImage = (value) => {
     scalePreview.style.transform = `scale(${value / 100})`;
-    scaleFildValue.value = `${value}%`;
+    scaleFieldValue.value = `${value}%`;
 };
 
 const resetScale = () => scaleImage(MAX_SCALE);
 
 const zoom = (step) => {
-    const scaleFildValueNumber = parseInt(scaleFildValue.value, 10) + step;
+    const scaleFildValueNumber = parseInt(scaleFieldValue.value, 10) + step;
     if (scaleFildValueNumber <= MAX_SCALE && scaleFildValueNumber >= MIN_SCALE) {
         scaleImage(scaleFildValueNumber);
     }
