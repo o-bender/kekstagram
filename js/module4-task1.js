@@ -76,3 +76,6 @@ getPhotoID(); // 2
 getPhotoID(); // 3
 
 const getPhotoID2 = createIndex();
+getPhotoID2(); // 1
+getPhotoID2(); // 2
+getPhotoID2(); // 3
