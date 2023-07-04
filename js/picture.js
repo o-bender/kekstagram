@@ -10,12 +10,14 @@ const createPictureElement = ({ url, likes, comments, description }) => {
   element.querySelector('.picture__likes').textContent = likes;
   element.querySelector('.picture__comments').textContent = comments.length;
 
-  element.addEventListener('click', () => openBigPictureModal(url, likes, comments, description));
+  // Спойлер для 8 домашней работы :)
+  // element.addEventListener('click', () => openBigPictureModal(url, likes, comments, description));
 
   return element;
 };
 
 const renderPictures = (pictures) => {
+  // Спойлер для одной из будущих домашних работ. Стоит удалять картинки из разметки перед тем как нарисовать новые.
   picturesElement.querySelectorAll('.picture').forEach((element) => element.remove());
   picturesElement.append(...pictures.map(createPictureElement));
 };
