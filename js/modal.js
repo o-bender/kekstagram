@@ -25,13 +25,14 @@ function onDocumentKeydown(evt) {
   }
 }
 
-const onCloseButtonClick = closePictureModal;
 const onCloseButtonKeydown = (evt) => {
   if (isAcceptKey(evt)) {
     evt.preventDefault();
     closePictureModal();
   }
 };
+
+const onCloseButtonClick = closePictureModal;
 
 const createModalComment = ({name, avatar, message}) => {
   const commentElement = commentTemplateElement.cloneNode(true);
